@@ -10,7 +10,7 @@ function Parse_OE() {
     var fourth = sheet.getSheetByName("Fourth");
     var fifth = sheet.getSheetByName("Fifth");
 
-  // Grab Value From Cell
+  // Grab Value From Entry Page's Cell
     var placard = sheet.getRange("Entry!C2");
     var placard_val = placard.getValues();
 
@@ -44,8 +44,17 @@ function Parse_OE() {
             // console.log(stu_data[ind]);
             fourth.appendRow(stu_data[ind]);
           }
-         else {
+         else if (val[5] == "5"){
             // console.log(stu_data[ind]);
+            fifth.appendRow(stu_data[ind]);
+          }
+         else {
+           // No Grade / Unformatted Grade provided by CS. Add student to all grade sheets.
+            kinder.appendRow(stu_data[ind]);
+            first.appendRow(stu_data[ind]);
+            second.appendRow(stu_data[ind]);
+            third.appendRow(stu_data[ind]);
+            fourth.appendRow(stu_data[ind]);
             fifth.appendRow(stu_data[ind]);
           }
         }
@@ -55,7 +64,7 @@ function Parse_OE() {
     placard.clearContent();
 }
 
-// For Clear Release button. Resets all sheets
+// For Clear Release button. Resets all sheets. ** Cannot have more than 250 rows or must increase A2:F250 value in argument **
 function ClearRelease() {
   // Setup Sheet
     var sheet = SpreadsheetApp.getActive();
@@ -71,3 +80,19 @@ function ClearRelease() {
   SpreadsheetApp.getUi().alert('Release Cleared Successfully...');
 }
 
+function CheckSetDate() {
+
+// Check for Last Update and Remind in Alert
+  // Grab range from README csv
+    var sheet = SpreadsheetApp.getActive();
+    var current_date = sheet.getSheetByName("README").getRange("D16");
+
+    if (current_date.getValue() == "") {
+      // Set Current Date since none exists yet
+        var temp_date = new Date().toDateString();
+        current_date.setValue(temp_date);
+    }
+
+}
+
+CheckSetDate()
